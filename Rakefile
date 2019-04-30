@@ -5,8 +5,8 @@ namespace :db do
   desc 'Run migrations'
   task :migrate, [:version] do |t, args|
     Sequel.extension :migration
-    db = Sequel.connect(YAML.load_file("#{SinatraConciergeApp::ROOT}/config/database.yml")[ENV['RACK_ENV']])
-    migration_path = "#{SinatraConciergeApp::ROOT}/db/migrations"
+    db = Sequel.connect(YAML.load_file("#{BASE_PATH}/config/database.yml")[ENV['RACK_ENV']])
+    migration_path = "#{BASE_PATH}/db/migrations"
 
     if args[:version]
       puts "Migrating to version #{args[:version]}"

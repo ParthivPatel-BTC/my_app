@@ -39,6 +39,7 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
+    rake (12.3.2)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
@@ -89,6 +90,7 @@ DEPENDENCIES
   jwt (~> 2.1.0)
   pry
   puma (= 3.12.0)
+  rake
   rest-client
   sequel (= 5.13.0)
   sequel_pg (= 1.11.0)
