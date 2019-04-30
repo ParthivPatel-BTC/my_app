@@ -1,0 +1,5 @@
+module JwtConstants
+  JWT_EXPIRATION_IN_SECONDS = 3600
+  JWT_SIGNING_ALGORITHM = 'HS256'.freeze
+  HMAC_SECRET = ENV.fetch("JWT_SECRET_KEY")
+end

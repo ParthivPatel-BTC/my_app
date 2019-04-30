@@ -1,0 +1,9 @@
+# http://sequel.jeremyevans.net/rdoc/files/doc/opening_databases_rdoc.html
+#
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: exampledb_development
+  pool: 5
+  username: postgres
+  password: postgres
