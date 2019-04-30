@@ -1,7 +1,4 @@
 module BaseApi
-
-  # skip_before_action :verify_authenticity_token
-  # before_filter :ensure_json_request
   module_function
 
   attr_accessor :decoded_token
