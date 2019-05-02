@@ -6,6 +6,7 @@ class ChatbotConversation < Base
 
   post '/chatbot-conversation' do
     chatbot_conversation = params[:chatbot_conversation]
+    TestWorker.perform_async(2)
     # Create and save conversation and messages in database
     #conversation_id = Concierge::CreateConversation.new(customer, chatbot_conversation[:steps], chatbot_conversation[:helpType]).create_new_conversation
 
