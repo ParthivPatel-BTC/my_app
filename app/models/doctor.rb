@@ -1,2 +1,2 @@
-class Doctor
+class Doctor < Sequel::Model
 end

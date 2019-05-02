@@ -9,7 +9,7 @@ class Base < SinatraConciergeApp
   attr_accessor :decoded_token
 
   def validate_jwt
-    return unauthorize_access if access_token.empty?
+    return unauthorize_access if access_token.nil?
 
     @decoded_token = Auth::JWTDecoder.new(token: access_token)
     # if @decoded_token.blacklisted?
@@ -23,8 +23,8 @@ class Base < SinatraConciergeApp
   end
 
   def authenticated_user
-    halt 401 if decoded_token.blank?
-    Userlogin.find(decoded_token.jwt_user_id)
+    halt 401 if decoded_token.nil?
+    Userlogin[decoded_token.jwt_user_id]
   end
 
   private

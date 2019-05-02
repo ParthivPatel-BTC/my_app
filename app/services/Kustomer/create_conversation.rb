@@ -29,7 +29,7 @@ module Kustomer
         else
           message_content = extract_message_or_value(message)
         end
-        message_params << {content: message_content, userlogin_id: userlogin_id, sender_id: sender_id(message)}
+        message_params << {content: message_content, userlogin_id: userlogin_id, sender_id: sender_id(message), conversation_id: conversation.id}
       end
       create_messages
       save_meta_data
@@ -39,7 +39,7 @@ module Kustomer
     def save_meta_data
       # Save extracted data in the relative tables
       resource_params[:customer_id] = customer.id
-      TABLE_HELP_MAPPING[helptype.to_sym].create!(resource_params)
+      TABLE_HELP_MAPPING[helptype.to_sym].create(resource_params)
     end
 
     private
@@ -49,7 +49,12 @@ module Kustomer
     end
 
     def conversation
-      @conversation ||= Conversation.create!(customer_id: customer.id)
+      # To avoide Sequel::MassAssignmentRestriction - id is a restricted primary key error
+      # https://github.com/jeremyevans/sequel/blob/master/doc/mass_assignment.rdoc
+      Conversation.unrestrict_primary_key
+
+      conversation_id = Conversation.last.id + 1
+      @conversation ||= Conversation.create(id: conversation_id, customer_id: customer.id, updated_at: DateTime.now)
     end
 
     def message_params
@@ -65,7 +70,11 @@ module Kustomer
     end
 
     def create_messages
-      conversation.messages.create!(message_params)
+      Message.unrestrict_primary_key
+      message_params.each do |message_param|
+        Message.create(message_param.merge(id: Message.last.id + 1, updated_at: Time.now))
+      end
+      # conversation.messages.create(message_params)
     end
   end
 end
