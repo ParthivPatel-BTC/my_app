@@ -1,7 +1,6 @@
-require 'sinatra/base'
 require 'multi_json'
 
-class Base < Sinatra::Base
+class Base < SinatraConciergeApp
 
   before do
     ensure_json_request
@@ -10,29 +9,23 @@ class Base < Sinatra::Base
   attr_accessor :decoded_token
 
   def validate_jwt
-    return unauthorize_access if access_token.blank?
+    return unauthorize_access if access_token.empty?
 
     @decoded_token = Auth::JWTDecoder.new(token: access_token)
-
-    if @decoded_token.blacklisted?
-      @decoded_token.revoke_token
-      render json: {errors: "The token is no longer valid."}, status: 403
-    end
+    # if @decoded_token.blacklisted?
+    #   @decoded_token.revoke_token
+    #   render json: {errors: "The token is no longer valid."}, status: 403
+    # end
   rescue JWT::ExpiredSignature
-    render json: {errors: "The token has expired."}, status: 403
+    halt 403, MultiJson.dump({message: "The token has expired"})
   rescue JWT::DecodeError # Most generic decoding error
-    render json: {errors: "The token is missing or invalid."}, status: 403
+    halt 403, MultiJson.dump({message: "The token is missing or invalid"})
   end
 
   def authenticated_user
     halt 401 if decoded_token.blank?
     Userlogin.find(decoded_token.jwt_user_id)
   end
-
-  # rescue_from(ActionController::ParameterMissing) do |parameter_missing_exception|
-  #   error = { "#{parameter_missing_exception.param}": 'parameter is required' }
-  #   render json: { errors: error }, status: :bad_request
-  # end
 
   private
 
@@ -59,8 +52,7 @@ class Base < Sinatra::Base
   def logout_user; end
 
   def ensure_json_request
-    halt 200 if request.format.json?
-    halt 204
+    halt 422 unless request.env["CONTENT_TYPE"] == 'application/json'
   end
 
   def customer

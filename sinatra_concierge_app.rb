@@ -1,8 +1,10 @@
 require 'yaml'
+require 'sinatra/base'
 
-class SinatraConciergeApp < Sinatra::Application
+class SinatraConciergeApp < Sinatra::Base
 
   set :app_file, __FILE__
+  set :root, File.dirname(__FILE__)
   set :server, :puma
   # use Rack::Csrf, raise: true
 
