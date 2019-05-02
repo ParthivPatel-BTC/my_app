@@ -8,13 +8,13 @@ module Auth
       @jwt_user_id = decoded_token["sub"]
     end
 
-    # def blacklisted?
-    #   JwtBlacklist.where(jti: decoded_token["jti"]).exists?
-    # end
+    def blacklisted?
+      JwtBlacklist.where(jti: decoded_token["jti"]).empty?
+    end
 
-    # def revoke_token
-    #   JwtBlacklist.create(jti: decoded_token["jti"], exp: Time.current)
-    # end
+    def revoke_token
+      JwtBlacklist.create(jti: decoded_token["jti"], exp: Time.now)
+    end
 
     private
 

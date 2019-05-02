@@ -35,6 +35,8 @@ GEM
       method_source (~> 0.9.0)
     puma (3.12.0)
     rack (2.0.7)
+    rack-contrib (2.1.0)
+      rack (~> 2.0)
     rack-protection (2.0.4)
       rack
     rack-test (1.1.0)
@@ -90,6 +92,7 @@ DEPENDENCIES
   jwt (~> 2.1.0)
   pry
   puma (= 3.12.0)
+  rack-contrib
   rake
   rest-client
   sequel (= 5.13.0)

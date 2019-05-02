@@ -4,7 +4,7 @@ class ChatbotConversation < Base
     validate_jwt
   end
 
-  post '/' do
+  post '/chatbot-conversation' do
     chatbot_conversation = params[:chatbot_conversation]
     # Create and save conversation and messages in database
     #conversation_id = Concierge::CreateConversation.new(customer, chatbot_conversation[:steps], chatbot_conversation[:helpType]).create_new_conversation

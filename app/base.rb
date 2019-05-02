@@ -3,7 +3,8 @@ require 'multi_json'
 class Base < SinatraConciergeApp
 
   before do
-    ensure_json_request
+    content_type 'application/json'
+    params.merge!(JSON.parse(request.body.read))
   end
 
   attr_accessor :decoded_token
@@ -12,10 +13,10 @@ class Base < SinatraConciergeApp
     return unauthorize_access if access_token.empty?
 
     @decoded_token = Auth::JWTDecoder.new(token: access_token)
-    # if @decoded_token.blacklisted?
-    #   @decoded_token.revoke_token
-    #   render json: {errors: "The token is no longer valid."}, status: 403
-    # end
+    if @decoded_token.blacklisted?
+      @decoded_token.revoke_token
+      halt 403, MultiJson.dump({message: "The token is no longer valid."})
+    end
   rescue JWT::ExpiredSignature
     halt 403, MultiJson.dump({message: "The token has expired"})
   rescue JWT::DecodeError # Most generic decoding error
