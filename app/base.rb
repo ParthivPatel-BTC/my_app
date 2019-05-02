@@ -1,4 +1,5 @@
 require 'multi_json'
+require_relative '../sinatra_concierge_app.rb'
 
 class Base < SinatraConciergeApp
 
