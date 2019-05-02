@@ -34,6 +34,7 @@ GEM
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
     crass (1.0.4)
+    connection_pool (2.2.2)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     erubi (1.8.0)
@@ -67,6 +68,8 @@ GEM
       method_source (~> 0.9.0)
     puma (3.12.0)
     rack (2.0.7)
+    rack-contrib (2.1.0)
+      rack (~> 2.0)
     rack-protection (2.0.4)
       rack
     rack-test (1.1.0)
@@ -77,6 +80,7 @@ GEM
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
     rake (12.3.2)
+    redis (4.1.0)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
@@ -93,6 +97,11 @@ GEM
     sequel_pg (1.11.0)
       pg (>= 0.18.0)
       sequel (>= 4.38.0)
+    sidekiq (5.2.7)
+      connection_pool (~> 2.2, >= 2.2.2)
+      rack (>= 1.5.0)
+      rack-protection (>= 1.5.0)
+      redis (>= 3.3.5, < 5)
     sinatra (2.0.4)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -128,10 +137,12 @@ DEPENDENCIES
   jwt (~> 2.1.0)
   pry
   puma (= 3.12.0)
+  rack-contrib
   rake
   rest-client
   sequel (= 5.13.0)
   sequel_pg (= 1.11.0)
+  sidekiq
   sinatra (= 2.0.4)
   sinatra-contrib (= 2.0.4)
   tux (= 0.3.0)

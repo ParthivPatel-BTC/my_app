@@ -4,10 +4,11 @@ class ChatbotConversation < Base
     validate_jwt
   end
 
-  post '/' do
-    chatbot_conversation = JSON.parse(request.body.read)['chatbot_conversation']
+  post '/chatbot-conversation' do
+    chatbot_conversation = params[:chatbot_conversation]
+    TestWorker.perform_async(2)
     # Create and save conversation and messages in database
-    conversation_id = Kustomer::CreateConversation.new(customer, chatbot_conversation['steps'], chatbot_conversation['helpType']).create_new_conversation
+    conversation_id = Concierge::CreateConversation.new(customer, chatbot_conversation[:steps], chatbot_conversation[:helpType]).create_new_conversation
 
     # Create conversation, messages and customer in Kustomer platform
     # KustomerConversationWorker.perform_async(customer.id, chatbot_conversation[:steps], conversation_id)
