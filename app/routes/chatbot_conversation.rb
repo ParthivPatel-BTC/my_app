@@ -1,6 +1,8 @@
 require 'sidekiq'
 require 'sidekiq/api'
 require 'sidekiq/web'
+require 'dotenv'
+Dotenv.load('local.env')
 require_relative '../base.rb'
 require_relative '../../lib/workers/kustomer_conversation_worker.rb'
 
@@ -11,6 +13,7 @@ class ChatbotConversation < Base
   end
 
   post '/chatbot-conversation' do
+
     chatbot_conversation = params[:chatbot_conversation]
 
     # Create and save conversation and messages in database
