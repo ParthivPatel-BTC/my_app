@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+require_relative '../../../app/services/kustomer/attachment.rb'
 
-module Concierge
+module Kustomer
   class KustomerMessagePayload
 
     attr_reader :msg

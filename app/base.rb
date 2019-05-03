@@ -1,44 +1,42 @@
-module BaseApi
+require 'multi_json'
+require_relative '../sinatra_concierge_app.rb'
 
-  # skip_before_action :verify_authenticity_token
-  # before_filter :ensure_json_request
-  module_function
+class Base < SinatraConciergeApp
+
+  before do
+    content_type 'application/json'
+    params.merge!(JSON.parse(request.body.read))
+  end
 
   attr_accessor :decoded_token
 
-  def validate_jwt(access_token)
+  def validate_jwt
     return unauthorize_access if access_token.nil?
 
-    @decoded_token = JWTDecoder.new(token: access_token)
-
+    @decoded_token = Auth::JWTDecoder.new(token: access_token)
     if @decoded_token.blacklisted?
       @decoded_token.revoke_token
-      {errors: "The token is no longer valid."}.to_json
+      halt 403, MultiJson.dump({message: "The token is no longer valid."})
     end
   rescue JWT::ExpiredSignature
-    {errors: "The token has expired."}.to_json
+    halt 403, MultiJson.dump({message: "The token has expired"})
   rescue JWT::DecodeError # Most generic decoding error
-    {errors: "The token is missing or invalid."}.to_json
+    halt 403, MultiJson.dump({message: "The token is missing or invalid"})
   end
 
   def authenticated_user
-    return if decoded_token.blank?
-    Userlogin.find(decoded_token.jwt_user_id)
+    halt 401 if decoded_token.nil?
+    Userlogin[decoded_token.jwt_user_id]
   end
 
-  # rescue_from(ActionController::ParameterMissing) do |parameter_missing_exception|
-  #   error = { "#{parameter_missing_exception.param}": 'parameter is required' }
-  #   render json: { errors: error }, status: :bad_request
-  # end
+  private
 
-  # private
-
-  # def access_token(access_token)
-  #   access_token
-  # end
+  def access_token
+    request.env['HTTP_ACCESS_TOKEN']
+  end
 
   def unauthorize_access
-    render json: {errors: 'The token is missing.'}, status: 403
+    halt 401, MultiJson.dump({message: "You are not authorized to access this resource"})
   end
 
   def success_response(status: 200, message: '', data: {})
@@ -56,8 +54,7 @@ module BaseApi
   def logout_user; end
 
   def ensure_json_request
-    return if request.format.json?
-    render nothing: true, status: :not_acceptable
+    halt 422 unless request.env["CONTENT_TYPE"] == 'application/json'
   end
 
   def customer

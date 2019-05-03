@@ -1,31 +1,18 @@
 require_relative 'config/boot'
-require_relative 'my_app'
-
-namespace :assets do
-  desc "Precompile assets"
-  task :precompile do
-    manifest = ::Sprockets::Manifest.new(MyApp.assets.index, "#{MyApp.public_folder}/assets")
-    manifest.compile(MyApp.assets_manifest)
-  end
-
-  desc "Clean assets"
-  task :clean do
-    FileUtils.rm_rf("#{MyApp.public_folder}/assets")
-  end
-end
+require_relative 'sinatra_concierge_app'
 
 namespace :db do
-  desc "Run migrations"
+  desc 'Run migrations'
   task :migrate, [:version] do |t, args|
     Sequel.extension :migration
-    db = Sequel.connect(YAML.load_file("#{Sinator::ROOT}/config/database.yml")[ENV['RACK_ENV']])
-    migration_path = "#{Sinator::ROOT}/db/migrations"
+    db = Sequel.connect(YAML.load_file("#{BASE_PATH}/config/database.yml")[ENV['RACK_ENV']])
+    migration_path = "#{BASE_PATH}/db/migrations"
 
     if args[:version]
       puts "Migrating to version #{args[:version]}"
       Sequel::Migrator.run(db, migration_path, target: args[:version].to_i)
     else
-      puts "Migrating to latest"
+      puts 'Migrating to latest'
       Sequel::Migrator.run(db, migration_path)
     end
   end
