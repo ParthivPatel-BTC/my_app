@@ -1,6 +1,7 @@
 require_relative '../../../app/constants/util_constants.rb'
 require_relative '../../../lib/errors.rb'
 require 'httparty'
+require 'rest-client'
 
 module Kustomer
   class KustomerApiClient

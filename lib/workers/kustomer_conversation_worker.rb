@@ -1,5 +1,5 @@
 require_relative '../../app/models/customer.rb'
-require_relative '../../app/services/Kustomer/kustomer_conversation.rb'
+require_relative '../../app/services/kustomer/kustomer_conversation.rb'
 
 class KustomerConversationWorker
   include Sidekiq::Worker

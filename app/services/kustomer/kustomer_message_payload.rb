@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require_relative '../../../app/services/Kustomer/kustomer_message_payload.rb'
+require_relative '../../../app/services/kustomer/attachment.rb'
 
 module Kustomer
   class KustomerMessagePayload

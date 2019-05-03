@@ -1,6 +1,6 @@
 require_relative '../../../app/models/conversation.rb'
-require_relative '../../../app/services/Kustomer/kustomer_api_client.rb'
-require_relative '../../../app/services/Kustomer/kustomer_message_payload.rb'
+require_relative '../../../app/services/kustomer/kustomer_api_client.rb'
+require_relative '../../../app/services/kustomer/kustomer_message_payload.rb'
 require 'active_model_serializers'
 
 module Kustomer
