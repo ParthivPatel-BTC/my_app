@@ -1,2 +1,2 @@
-class Prescription
+class Prescription < Sequel::Model
 end

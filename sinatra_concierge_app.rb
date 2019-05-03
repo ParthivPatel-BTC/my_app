@@ -1,5 +1,6 @@
 require 'yaml'
 require 'sinatra/base'
+require 'sequel'
 
 class SinatraConciergeApp < Sinatra::Base
 

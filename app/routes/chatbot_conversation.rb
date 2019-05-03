@@ -1,3 +1,10 @@
+# require 'sinatra/base'
+require 'sidekiq'
+require 'sidekiq/api'
+require 'sidekiq/web'
+require_relative '../base.rb'
+require_relative '../../lib/workers/kustomer_conversation_worker.rb'
+
 class ChatbotConversation < Base
 
   before do
@@ -6,12 +13,12 @@ class ChatbotConversation < Base
 
   post '/chatbot-conversation' do
     chatbot_conversation = params[:chatbot_conversation]
-    TestWorker.perform_async(2)
+    # TestWorker.perform_async(2)
     # Create and save conversation and messages in database
-    #conversation_id = Concierge::CreateConversation.new(customer, chatbot_conversation[:steps], chatbot_conversation[:helpType]).create_new_conversation
+    conversation_id = Kustomer::CreateConversation.new(customer, chatbot_conversation[:steps], chatbot_conversation[:helpType]).create_new_conversation
 
     # Create conversation, messages and customer in Kustomer platform
-    # KustomerConversationWorker.perform_async(customer.id, chatbot_conversation[:steps], conversation_id)
+    KustomerConversationWorker.perform_async(customer.id, chatbot_conversation[:steps], conversation_id)
     # success_response
 
     content_type :json

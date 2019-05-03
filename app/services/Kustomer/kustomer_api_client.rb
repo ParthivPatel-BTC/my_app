@@ -1,13 +1,17 @@
+require_relative '../../../app/constants/util_constants.rb'
+require_relative '../../../lib/errors.rb'
+require 'httparty'
+
 module Kustomer
   class KustomerApiClient
     include HTTParty
     BASE_API = 'https://api.kustomerapp.com/v1'.freeze
     HEADERS = {'Content-Type': 'application/json', "Authorization": "Bearer #{UtilConstants::KUSTOMER_API_AUTH_TOKEN}"}.freeze
 
-    RETRY_HANDLER = Proc.new do |exception, attempt_number, total_delay|
-      Rails.logger.debug "Handler saw a #{exception.class}; retry attempt #{attempt_number}; #{total_delay} seconds have passed."
-    end
-    RETRY_OPTIONS = { base_sleep_seconds: 2, max_sleep_seconds: 5, rescue: UtilConstants::KUSTOMER_ERRORS, handler: RETRY_HANDLER, max_tries: 2 }.freeze
+    # RETRY_HANDLER = Proc.new do |exception, attempt_number, total_delay|
+    #   Rails.logger.debug "Handler saw a #{exception.class}; retry attempt #{attempt_number}; #{total_delay} seconds have passed."
+    # end
+    # RETRY_OPTIONS = { base_sleep_seconds: 2, max_sleep_seconds: 5, rescue: UtilConstants::KUSTOMER_ERRORS, handler: RETRY_HANDLER, max_tries: 2 }.freeze
 
     # Create new kustomer conversation
     def self.create_conversation(conversation_steps, kustomer_id)
@@ -90,19 +94,19 @@ module Kustomer
 
     def self.customer_detail(customer)
       {
-        name: customer.full_name,
+        name: 'SP',
         emails: [
           {
             type: "work",
             email: customer.email
           }
         ],
-        phones: [
-          {
-            type: "work",
-            phone:  customer.phone
-          }
-        ],
+        # phones: [
+        #   {
+        #     type: "work",
+        #     phone:  '0000000000'
+        #   }
+        # ],
         locations: [
           {
             type: "work",

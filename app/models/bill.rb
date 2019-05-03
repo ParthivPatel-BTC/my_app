@@ -1,2 +1,2 @@
-class Bill
+class Bill < Sequel::Model
 end
