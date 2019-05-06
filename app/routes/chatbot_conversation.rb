@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sidekiq'
 require 'sidekiq/api'
 require 'sidekiq/web'
@@ -7,13 +9,11 @@ require_relative '../base.rb'
 require_relative '../../lib/workers/kustomer_conversation_worker.rb'
 
 class ChatbotConversation < Base
-
   before do
     validate_jwt
   end
 
   post '/chatbot-conversation' do
-
     chatbot_conversation = params[:chatbot_conversation]
 
     # Create and save conversation and messages in database
@@ -23,6 +23,6 @@ class ChatbotConversation < Base
     KustomerConversationWorker.perform_async(customer.id, chatbot_conversation[:steps], conversation_id)
     # success_response
 
-    content_type :json
+    success_response
   end
 end

@@ -1,5 +1,5 @@
 class Conversation < Sequel::Model
-  one_to_many :messages, dependent: :destroy
+  one_to_many :messages
   many_to_one :customer
 
   def user

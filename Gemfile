@@ -11,9 +11,13 @@ gem 'sequel', '5.13.0'
 gem 'sequel_pg', '1.11.0', require: 'sequel'
 gem 'httparty'
 gem 'rest-client'
-gem 'pry'
 gem 'jwt', '~> 2.1.0'
 gem 'rake'
 gem 'active_model_serializers'
 gem 'aws-sdk-s3', '~> 1'
 gem 'dotenv'
+
+group :development do
+  gem 'pry'
+  gem 'rubocop'
+end
